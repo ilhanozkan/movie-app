@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie App</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="header-menu">-</div>
+
+      <ul class="menu">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Browse</a></li>
+        <li><a href="#">Movies</a></li>
+        <li><a href="#">TV Shows</a></li>
+        <li><a href="#">Watchlist</a></li>
+        <li><a href="#">Genres</a></li>
+      </ul>
+
+      <div class="profile">
+        <input type="search" name="search">
+        <img src="./img/erik.jpg" alt="Profile Photo" class="profile-photo">
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <figure class="slider-container">
+      <div class="slider-content">
+        <div class="movie-description">
+          <h2 class="movie-title"></h2>
+
+          <div class="movie-review">
+            <div class="rate">
+              <div id="star-1" class="star"></div>
+              <div id="star-2" class="star"></div>
+              <div id="star-3" class="star"></div>
+              <div id="star-4" class="star"></div>
+              <div id="star-5" class="star"></div>
+            </div>
+
+            <p class="reviews"></p>
+          </div>
+
+          <p class="movie-p"></p>
+        </div>
+  
+        <div class="movie-buttons">
+          <button class="watch-btn btn">Watch Now</button>
+          <button class="watchlist-btn btn">Add to Watchlist</button>
+        </div>
+      </div>
+
+      <div class="slider-buttons">
+        <button for="img-1" data-id="0" class="slider-btn"></button>
+        <button for="img-2" data-id="1" class="slider-btn"></button>
+        <button for="img-3" data-id="2" class="slider-btn"></button>
+        <button for="img-4" data-id="3" class="slider-btn"></button>
+        <button for="img-5" data-id="4" class="slider-btn"></button>
+      </div>
+
+      <div class="slider-imgs">
+        <img src="" alt="" class="slider-img">
+        <img src="" alt="" class="slider-img">
+        <img src="" alt="" class="slider-img">
+        <img src="" alt="" class="slider-img">
+        <img src="" alt="" class="slider-img">
+      </div>
+    </figure>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
