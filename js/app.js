@@ -2,16 +2,6 @@ const API_URL = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.
 const GENRES = 'https://api.themoviedb.org/3/genre/movie/list?api_key=04c35731a5ee918f014970082a0088b1&language=en-US';
 const IMG_PATH = 'https://image.tmdb.org/t/p/original';
 
-const inceptionImg = '../img/inception-backdrop-path.jpg';
-const inceptionTitle = 'Inception';
-const inceptionParag = `Cobb, a skilled thief who commits corporate
- espionage by infiltrating the subconscious of his targets is offered
- a chance to regain his old life as payment for a task considered to
- be impossible: "inception", the implantation of another person's
- idea into a target's subconscious.`;
-const inceptionReview = 28756;
-const inceptionStar = 8.3;
-
 const sliderImgContainer = document.querySelector('.slider-imgs');
 const sliderImgs = document.querySelectorAll('.slider-img');
 const stars = document.querySelectorAll('.star');
@@ -30,19 +20,8 @@ async function getMovies(url) {
 function setImages(movie) {
   let i = 0;
   
-  movie[3].backdrop_path = inceptionImg;
-  movie[3].title = inceptionTitle;
-  movie[3].overview = inceptionParag;
-  movie[3].vote_count = inceptionReview;
-  movie[3].vote_average = inceptionStar;
-  movie[3].overview = inceptionParag;
-
   sliderImgs.forEach((img) => {
-    if (i == 3) sliderImgs[i].src = inceptionImg;
-    else {
-      img.src = IMG_PATH + movie[i].backdrop_path;
-    }
-
+    img.src = IMG_PATH + movie[i].backdrop_path;
     i++;
   });
 }
@@ -80,12 +59,11 @@ function addMovieDesc(movie) {
 }
 
 function fillStars(movie, index) {
-  if (!movie[index]) return 0;
+  if (!movie[index]) return null;
 
   const movieStar = movie[index].vote_average;
   const filledStar = Math.floor(movieStar / 2);
   const fraction = (movieStar - Math.floor(movieStar));
-
 
   stars.forEach(star => star.style.background = '');
 
