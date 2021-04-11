@@ -3,11 +3,12 @@ const GENRES = 'https://api.themoviedb.org/3/genre/movie/list?api_key=04c35731a5
 const IMG_PATH = 'https://image.tmdb.org/t/p/original';
 
 const sliderImgContainer = document.querySelector('.slider-imgs');
+const sliderArticles = document.querySelectorAll('.slider-element');
 const sliderImgs = document.querySelectorAll('.slider-img');
 const stars = document.querySelectorAll('.star');
-const movieTitle = document.querySelector('.movie-title');
-const movieParag = document.querySelector('.movie-p');
-const movieReview = document.querySelector('.reviews');
+const movieTitles = document.querySelectorAll('.movie-title');
+const movieParags = document.querySelectorAll('.movie-p');
+const movieReviews = document.querySelectorAll('.reviews');
 
 async function getMovies(url) {
   const response = await fetch(url);
@@ -27,67 +28,54 @@ function setImages(movie) {
 }
 
 function addMovieDesc(movie) {
-  movieTitle.innerText = movie[0].title;
-  movieParag.innerText = movie[0].overview;
+  for (let i = 0; i < 5; i++) {
+    movieTitles[i].innerText = movie[i].title;
+    movieParags[i].innerText = movie[i].overview;
+    movieReviews[i].innerText = `(${movie[i].vote_count} reviews)`;
 
-  fillStars(movie, 0);
+    if (movie[i].vote_count > 999)
+      movie[i].vote_count = movie[i].vote_count / 1000;
 
-  if (movie[0].vote_count > 999)
-    movieReview.innerText += `(${movie[0].vote_count / 1000} reviews)`;
-  else
-    movieReview.innerText += `(${movie[0].vote_count} reviews)`;
+    fillStars(movie[i], i);
+  }
 
   document.querySelector('.slider-buttons').addEventListener('click', (btn) => {
-    clearInterval(autoStart);
-
     const index = btn.target.dataset.id;
+    
+    if (!index) return null;
 
-    sliderImgs.forEach((e) => imgTranslate(e, index));
-
-    if (index) {
-      movieTitle.innerText = movie[index].title;
-      movieParag.innerText = movie[index].overview;
-      
-      if (movie[index].vote_count > 999) movieReview.innerText = `(${movie[index].vote_count / 1000} reviews)`;
-      else movieReview.innerText = `(${movie[index].vote_count} reviews)`;
-    }
-
-    let startAgain = setInterval(autoTranslate, 5000);
-
-    fillStars(movie, index);
+    clearInterval(autoStart);
+    slideIndex = index;
+    autoStart = setInterval(autoTranslate, 5000);
+    sliderArticles.forEach((e) => sliderTranslate(e, index));
   });
 }
 
-function fillStars(movie, index) {
-  if (!movie[index]) return null;
-
-  const movieStar = movie[index].vote_average;
+function fillStars(movie, i) {
+  const stars = document.querySelectorAll(`#article-${i + 1} .star`);
+  const movieStar = movie.vote_average;
   const filledStar = Math.floor(movieStar / 2);
-  const fraction = (movieStar - Math.floor(movieStar));
+  const lastStar = filledStar;
+  const fraction = movieStar - Math.floor(movieStar);
 
-  stars.forEach(star => star.style.background = '');
+  for (let i = 0; i < filledStar; i++)
+    stars[i].style.background = '#ffc107';
 
-  for (let filledIndex = 1; filledIndex <= filledStar; filledIndex++) {
-    document.querySelector(`#star-${filledIndex}`).style.background = `#ffc107`;
-  }
-
-  document.querySelector(`#star-${filledStar + 1}`).style.background = 
-    `linear-gradient(90deg, #ffc107 ${fraction.toFixed(2) * 100}%, rgba(179, 179, 179, 0.3)0%)`;
-
-  console.log('filled', filledStar, 'fraction', fraction.toFixed(2) * 100);
+  stars[lastStar].style.background =
+  `linear-gradient(90deg, #ffc107 ${fraction.toFixed(2) * 100}%, rgba(179, 179, 179, 0.3)0%)`;
 }
 
-let index = 1;
+let slideIndex = 1;
 
 function autoTranslate() {
-  if (index == sliderImgs.length) index = 0;
+  if (slideIndex == sliderArticles.length) slideIndex = 0;
 
-  sliderImgs.forEach(e => e.style.transform = `translate(-${index * 100}%, -30%)`);
-  index++;
+  sliderArticles.forEach(e => sliderTranslate(e, slideIndex));
+  slideIndex++;
 }
 
-function imgTranslate(img, index) {
-  img.style.transform = `translate(-${(index * 100)}%, -30%)`;
+function sliderTranslate(e, index) {
+  e.style.transform = `translateX(-${(index * 100)}%)`;
 }
 
 let autoStart = setInterval(autoTranslate, 5000);

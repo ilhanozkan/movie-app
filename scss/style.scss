@@ -46,16 +46,9 @@ main {
       clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 
         79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
       background: linear-gradient(
-        90deg, #ffc107 0%, rgba(179, 179, 179, 0.3)0%);
+        90deg, #FFCD1A 0%, rgba(255, 255, 255, 0.3)0%);
       }
   }
-}
-
-.slider-img {
-  transform: translate(0%, -30%);
-  width: 100%;
-  z-index: -2;
-  transition: 1.5s cubic-bezier(1, 0, 0.14, 1);
 }
 
 .slider-imgs {
@@ -66,9 +59,28 @@ main {
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(36, 36, 36, 0.15);
     z-index: -1;
   }
+}
+
+.slider-element {
+  transform: translateX(0%);
+  transition: transform 1.5s cubic-bezier(0.42, 0, 0.34, 0.89);
+}
+
+.movie-details {
+  z-index: 1;
+  position: absolute;
+}
+
+.slider-img {
+  transform: translateX(0%);
+  width: 100vw;
+  max-width: 1920px;
+  min-width: 700px;
+  z-index: -2;
+  transition: transform 1.5s cubic-bezier(0.42, 0, 0.34, 0.89);
 }
 
 .slider-buttons {
