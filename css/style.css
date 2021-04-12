@@ -113,16 +113,22 @@ main {
   height: 10px;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 50%;
+  cursor: pointer;
 }
 
 .slider-btn:hover {
   background-color: #fff;
   -webkit-transform: scale(1.2);
           transform: scale(1.2);
-  cursor: pointer;
 }
 
 .slider-btn:not(:first-child) {
   margin-left: 10px;
+}
+
+.slider-btn-hover {
+  background-color: #fff;
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
 }
 /*# sourceMappingURL=style.css.map */

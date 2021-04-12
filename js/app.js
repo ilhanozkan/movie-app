@@ -29,12 +29,17 @@ function setImages(movie) {
 
 function addMovieDesc(movie) {
   for (let i = 0; i < 5; i++) {
+    let movieReview;
+    
+    if (movie[i].vote_count > 999)
+      movieReview = movie[i].vote_count / 1000;
+    else
+      movieReview = movie[i].vote_count;
+
     movieTitles[i].innerText = movie[i].title;
     movieParags[i].innerText = movie[i].overview;
-    movieReviews[i].innerText = `(${movie[i].vote_count} reviews)`;
-
-    if (movie[i].vote_count > 999)
-      movie[i].vote_count = movie[i].vote_count / 1000;
+    movieReviews[i].innerText =
+      `(${movieReview} reviews)`;
 
     fillStars(movie[i], i);
   }
@@ -46,8 +51,11 @@ function addMovieDesc(movie) {
 
     clearInterval(autoStart);
     slideIndex = index;
-    autoStart = setInterval(autoTranslate, 5000);
-    sliderArticles.forEach((e) => sliderTranslate(e, index));
+    autoStart = setInterval(autoTranslate, 4000);
+    sliderArticles.forEach(e => sliderTranslate(e, index));
+
+    activeId = parseInt(index, 10) + 1;
+    btnActive(activeId);
   });
 }
 
@@ -62,7 +70,7 @@ function fillStars(movie, i) {
     stars[i].style.background = '#ffc107';
 
   stars[lastStar].style.background =
-  `linear-gradient(90deg, #ffc107 ${fraction.toFixed(2) * 100}%, rgba(179, 179, 179, 0.3)0%)`;
+    `linear-gradient(90deg, #ffc107 ${fraction.toFixed(2) * 100}%, rgba(179, 179, 179, 0.3)0%)`;
 }
 
 let slideIndex = 1;
@@ -72,12 +80,24 @@ function autoTranslate() {
 
   sliderArticles.forEach(e => sliderTranslate(e, slideIndex));
   slideIndex++;
+
+  btnActive(slideIndex);
 }
 
 function sliderTranslate(e, index) {
   e.style.transform = `translateX(-${(index * 100)}%)`;
 }
 
-let autoStart = setInterval(autoTranslate, 5000);
+document.querySelector('#slider-btn-1').classList.add('slider-btn-hover');
+
+function btnActive(index) {
+  const prev = document.querySelectorAll(`.slider-btn`);
+  const active = document.querySelector(`#slider-btn-${index}`);
+  
+  prev.forEach(btn => btn.classList.remove('slider-btn-hover'));
+  active.classList.add('slider-btn-hover');
+}
+
+let autoStart = setInterval(autoTranslate, 4000);
 
 getMovies(API_URL);
