@@ -1,6 +1,9 @@
-const API_URL = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=1';
+const POPULAR_MOVIES = 'https://api.themoviedb.org/3/movie/popular?api_key=04c35731a5ee918f014970082a0088b1&language=en-US&page=1';
+const POPULAR_TV = 'https://api.themoviedb.org/3/tv/popular?api_key=04c35731a5ee918f014970082a0088b1&language=en-US&page=1';
+const NOW_PLAYING = 'https://api.themoviedb.org/3/movie/now_playing?api_key=04c35731a5ee918f014970082a0088b1&language=en-US&page=1';
 const GENRES = 'https://api.themoviedb.org/3/genre/movie/list?api_key=04c35731a5ee918f014970082a0088b1&language=en-US';
 const IMG_PATH = 'https://image.tmdb.org/t/p/original';
+const CARD_PATH = 'https://image.tmdb.org/t/p/w200';
 
 const sliderImgContainer = document.querySelector('.slider-imgs');
 const sliderArticles = document.querySelectorAll('.slider-element');
@@ -14,8 +17,18 @@ async function getMovies(url) {
   const response = await fetch(url);
   const data = await response.json();
 
-  setImages(data.results);
-  addMovieDesc(data.results);
+  switch (url) {
+    case NOW_PLAYING:
+      setImages(data.results);
+      addMovieDesc(data.results);
+      break;
+    case POPULAR_MOVIES:
+      addMovieCard(data.results, 'popular-movies');
+      break;
+    case POPULAR_TV:
+      addMovieCard(data.results, 'popular-tv-shows');
+      break;
+  }
 }
 
 function setImages(movie) {
@@ -98,6 +111,23 @@ function btnActive(index) {
   active.classList.add('slider-btn-hover');
 }
 
+function addMovieCard(movie, ulName) {
+  for (let i = 0; i < 20; i++) {
+    let ul = document.querySelector(`.${ulName}`);
+    let li = document.createElement('li');
+    let img = document.createElement('img');
+
+    ul.appendChild(li);
+    li.appendChild(img)
+    li.classList.add('movie-card')
+    img.classList.add('movie-card')
+    img.src = CARD_PATH + movie[i].poster_path;
+    console.log(ul);
+  }
+}
+
 let autoStart = setInterval(autoTranslate, 4000);
 
-getMovies(API_URL);
+getMovies(POPULAR_MOVIES);
+getMovies(POPULAR_TV);
+getMovies(NOW_PLAYING);

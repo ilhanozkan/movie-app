@@ -4,6 +4,20 @@
   border: none;
 }
 
+body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-family: sans-serif;
+}
+
 nav {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -21,12 +35,10 @@ nav .profile-photo {
 }
 
 main {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  display: -ms-grid;
+  display: grid;
+  max-width: 1920px;
+  overflow-x: hidden;
 }
 
 .slider-container {
@@ -86,8 +98,7 @@ main {
 .slider-img {
   -webkit-transform: translateX(0%);
           transform: translateX(0%);
-  width: 100vw;
-  max-width: 1920px;
+  width: 1920px;
   min-width: 700px;
   z-index: -2;
   -webkit-transition: -webkit-transform 1.5s cubic-bezier(0.42, 0, 0.34, 0.89);
@@ -130,5 +141,50 @@ main {
   background-color: #fff;
   -webkit-transform: scale(1.2);
           transform: scale(1.2);
+}
+
+.list-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  overflow-x: auto;
+}
+
+.movie-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  margin: 38px 0 18px 48px;
+}
+
+.movie-list-title {
+  margin-top: 34px;
+  margin-left: 48px;
+}
+
+.movie-card {
+  display: inline;
+  width: 130px;
+  border-radius: 5px;
+  -webkit-transition: -webkit-transform 200ms ease-in;
+  transition: -webkit-transform 200ms ease-in;
+  transition: transform 200ms ease-in;
+  transition: transform 200ms ease-in, -webkit-transform 200ms ease-in;
+}
+
+.movie-card:not(:last-child) {
+  margin-right: 26px;
+}
+
+.movie-card:hover {
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+  cursor: pointer;
 }
 /*# sourceMappingURL=style.css.map */
