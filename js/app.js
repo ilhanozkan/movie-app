@@ -5,10 +5,8 @@ const GENRES = 'https://api.themoviedb.org/3/genre/movie/list?api_key=04c35731a5
 const IMG_PATH = 'https://image.tmdb.org/t/p/original';
 const CARD_PATH = 'https://image.tmdb.org/t/p/w200';
 
-const sliderImgContainer = document.querySelector('.slider-imgs');
 const sliderArticles = document.querySelectorAll('.slider-element');
 const sliderImgs = document.querySelectorAll('.slider-img');
-const stars = document.querySelectorAll('.star');
 const movieTitles = document.querySelectorAll('.movie-title');
 const movieParags = document.querySelectorAll('.movie-p');
 const movieReviews = document.querySelectorAll('.reviews');
@@ -32,29 +30,26 @@ async function getMovies(url) {
 }
 
 function setImages(movie) {
-  let i = 0;
-  
-  sliderImgs.forEach((img) => {
-    img.src = IMG_PATH + movie[i].backdrop_path;
-    i++;
+  sliderImgs.forEach((img, index) => {
+    img.src = IMG_PATH + movie[index].backdrop_path;
   });
 }
 
 function addMovieDesc(movie) {
-  for (let i = 0; i < 5; i++) {
+  for (let index = 0; index < 5; index++) {
     let movieReview;
     
-    if (movie[i].vote_count > 999)
-      movieReview = movie[i].vote_count / 1000;
+    if (movie[index].vote_count > 999)
+      movieReview = movie[index].vote_count / 1000;
     else
-      movieReview = movie[i].vote_count;
+      movieReview = movie[index].vote_count;
 
-    movieTitles[i].innerText = movie[i].title;
-    movieParags[i].innerText = movie[i].overview;
-    movieReviews[i].innerText =
+    movieTitles[index].innerText = movie[index].title;
+    movieParags[index].innerText = movie[index].overview;
+    movieReviews[index].innerText =
       `(${movieReview} reviews)`;
 
-    fillStars(movie[i], i);
+    fillStars(movie[index], index);
   }
 
   document.querySelector('.slider-buttons').addEventListener('click', (btn) => {
@@ -72,15 +67,15 @@ function addMovieDesc(movie) {
   });
 }
 
-function fillStars(movie, i) {
-  const stars = document.querySelectorAll(`#article-${i + 1} .star`);
+function fillStars(movie, index) {
+  const stars = document.querySelectorAll(`#article-${index + 1} .star`);
   const movieStar = movie.vote_average;
   const filledStar = Math.floor(movieStar / 2);
   const lastStar = filledStar;
   const fraction = movieStar - Math.floor(movieStar);
 
-  for (let i = 0; i < filledStar; i++)
-    stars[i].style.background = '#ffc107';
+  for (let index = 0; index < filledStar; index++)
+    stars[index].style.background = '#ffc107';
 
   stars[lastStar].style.background =
     `linear-gradient(90deg, #ffc107 ${fraction.toFixed(2) * 100}%, rgba(179, 179, 179, 0.3)0%)`;
@@ -112,17 +107,17 @@ function btnActive(index) {
 }
 
 function addMovieCard(movie, ulName) {
-  for (let i = 0; i < 20; i++) {
-    let ul = document.querySelector(`.${ulName}`);
+  let ul = document.querySelector(`.${ulName}`);
+
+  for (let index = 0; index < 20; index++) {
     let li = document.createElement('li');
     let img = document.createElement('img');
 
     ul.appendChild(li);
-    li.appendChild(img)
-    li.classList.add('movie-card')
-    img.classList.add('movie-card')
-    img.src = CARD_PATH + movie[i].poster_path;
-    console.log(ul);
+    li.appendChild(img);
+    li.classList.add('movie-card');
+    img.classList.add('movie-card');
+    img.src = CARD_PATH + movie[index].poster_path;
   }
 }
 
