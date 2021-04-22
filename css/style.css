@@ -4,6 +4,20 @@
   border: none;
 }
 
+body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-family: sans-serif;
+}
+
 nav {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -21,19 +35,29 @@ nav .profile-photo {
 }
 
 main {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  display: -ms-grid;
+  display: grid;
+  max-width: 1920px;
+  overflow-x: hidden;
 }
 
 .slider-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
   position: relative;
   width: 1920px;
   height: 310.8px;
   overflow: hidden;
+}
+
+.slider-container::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(36, 36, 36, 0.15);
+  z-index: -1;
 }
 
 .slider-content {
@@ -50,32 +74,34 @@ main {
   height: 20px;
   -webkit-clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
           clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-  background: -webkit-gradient(linear, left top, right top, from(#ffc107), color-stop(0%, rgba(179, 179, 179, 0.3)));
-  background: linear-gradient(90deg, #ffc107 0%, rgba(179, 179, 179, 0.3) 0%);
+  background: -webkit-gradient(linear, left top, right top, from(#FFCD1A), color-stop(0%, rgba(255, 255, 255, 0.3)));
+  background: linear-gradient(90deg, #FFCD1A 0%, rgba(255, 255, 255, 0.3) 0%);
+}
+
+.slider-element {
+  -webkit-transform: translateX(0%);
+          transform: translateX(0%);
+  -webkit-transition: -webkit-transform 1.5s cubic-bezier(0.42, 0, 0.34, 0.89);
+  transition: -webkit-transform 1.5s cubic-bezier(0.42, 0, 0.34, 0.89);
+  transition: transform 1.5s cubic-bezier(0.42, 0, 0.34, 0.89);
+  transition: transform 1.5s cubic-bezier(0.42, 0, 0.34, 0.89), -webkit-transform 1.5s cubic-bezier(0.42, 0, 0.34, 0.89);
+}
+
+.movie-details {
+  z-index: 1;
+  position: absolute;
 }
 
 .slider-img {
-  -webkit-transform: translate(0%, -30%);
-          transform: translate(0%, -30%);
-  width: 100%;
+  -webkit-transform: translateX(0%);
+          transform: translateX(0%);
+  width: 1920px;
+  min-width: 700px;
   z-index: -2;
-  -webkit-transition: 1.5s cubic-bezier(1, 0, 0.14, 1);
-  transition: 1.5s cubic-bezier(1, 0, 0.14, 1);
-}
-
-.slider-imgs {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-.slider-imgs::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.1);
-  z-index: -1;
+  -webkit-transition: -webkit-transform 1.5s cubic-bezier(0.42, 0, 0.34, 0.89);
+  transition: -webkit-transform 1.5s cubic-bezier(0.42, 0, 0.34, 0.89);
+  transition: transform 1.5s cubic-bezier(0.42, 0, 0.34, 0.89);
+  transition: transform 1.5s cubic-bezier(0.42, 0, 0.34, 0.89), -webkit-transform 1.5s cubic-bezier(0.42, 0, 0.34, 0.89);
 }
 
 .slider-buttons {
@@ -95,16 +121,67 @@ main {
   height: 10px;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 50%;
+  cursor: pointer;
 }
 
 .slider-btn:hover {
   background-color: #fff;
   -webkit-transform: scale(1.2);
           transform: scale(1.2);
-  cursor: pointer;
 }
 
 .slider-btn:not(:first-child) {
   margin-left: 10px;
+}
+
+.slider-btn-hover {
+  background-color: #fff;
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
+}
+
+.list-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  overflow-x: auto;
+}
+
+.movie-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  margin: 38px 0 18px 48px;
+}
+
+.movie-list-title {
+  margin-top: 34px;
+  margin-left: 48px;
+}
+
+.movie-card {
+  display: inline;
+  width: 130px;
+  border-radius: 5px;
+  -webkit-transition: -webkit-transform 200ms ease-in;
+  transition: -webkit-transform 200ms ease-in;
+  transition: transform 200ms ease-in;
+  transition: transform 200ms ease-in, -webkit-transform 200ms ease-in;
+}
+
+.movie-card:not(:last-child) {
+  margin-right: 26px;
+}
+
+.movie-card:hover {
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+  cursor: pointer;
 }
 /*# sourceMappingURL=style.css.map */

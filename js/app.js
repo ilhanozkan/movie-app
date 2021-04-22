@@ -1,117 +1,128 @@
-const API_URL = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=1';
+const POPULAR_MOVIES = 'https://api.themoviedb.org/3/movie/popular?api_key=04c35731a5ee918f014970082a0088b1&language=en-US&page=1';
+const POPULAR_TV = 'https://api.themoviedb.org/3/tv/popular?api_key=04c35731a5ee918f014970082a0088b1&language=en-US&page=1';
+const NOW_PLAYING = 'https://api.themoviedb.org/3/movie/now_playing?api_key=04c35731a5ee918f014970082a0088b1&language=en-US&page=1';
 const GENRES = 'https://api.themoviedb.org/3/genre/movie/list?api_key=04c35731a5ee918f014970082a0088b1&language=en-US';
 const IMG_PATH = 'https://image.tmdb.org/t/p/original';
+const CARD_PATH = 'https://image.tmdb.org/t/p/w200';
 
-const inceptionImg = '../img/inception-backdrop-path.jpg';
-const inceptionTitle = 'Inception';
-const inceptionParag = `Cobb, a skilled thief who commits corporate
- espionage by infiltrating the subconscious of his targets is offered
- a chance to regain his old life as payment for a task considered to
- be impossible: "inception", the implantation of another person's
- idea into a target's subconscious.`;
-const inceptionReview = 28756;
-const inceptionStar = 8.3;
-
-const sliderImgContainer = document.querySelector('.slider-imgs');
+const sliderArticles = document.querySelectorAll('.slider-element');
 const sliderImgs = document.querySelectorAll('.slider-img');
-const stars = document.querySelectorAll('.star');
-const movieTitle = document.querySelector('.movie-title');
-const movieParag = document.querySelector('.movie-p');
-const movieReview = document.querySelector('.reviews');
+const movieTitles = document.querySelectorAll('.movie-title');
+const movieParags = document.querySelectorAll('.movie-p');
+const movieReviews = document.querySelectorAll('.reviews');
 
 async function getMovies(url) {
   const response = await fetch(url);
   const data = await response.json();
 
-  setImages(data.results);
-  addMovieDesc(data.results);
+  switch (url) {
+    case NOW_PLAYING:
+      setImages(data.results);
+      addMovieDesc(data.results);
+      break;
+    case POPULAR_MOVIES:
+      addMovieCard(data.results, 'popular-movies');
+      break;
+    case POPULAR_TV:
+      addMovieCard(data.results, 'popular-tv-shows');
+      break;
+  }
 }
 
 function setImages(movie) {
-  let i = 0;
-  
-  movie[3].backdrop_path = inceptionImg;
-  movie[3].title = inceptionTitle;
-  movie[3].overview = inceptionParag;
-  movie[3].vote_count = inceptionReview;
-  movie[3].vote_average = inceptionStar;
-  movie[3].overview = inceptionParag;
-
-  sliderImgs.forEach((img) => {
-    if (i == 3) sliderImgs[i].src = inceptionImg;
-    else {
-      img.src = IMG_PATH + movie[i].backdrop_path;
-    }
-
-    i++;
+  sliderImgs.forEach((img, index) => {
+    img.src = IMG_PATH + movie[index].backdrop_path;
   });
 }
 
 function addMovieDesc(movie) {
-  movieTitle.innerText = movie[0].title;
-  movieParag.innerText = movie[0].overview;
+  for (let index = 0; index < 5; index++) {
+    let movieReview;
+    
+    if (movie[index].vote_count > 999)
+      movieReview = movie[index].vote_count / 1000;
+    else
+      movieReview = movie[index].vote_count;
 
-  fillStars(movie, 0);
+    movieTitles[index].innerText = movie[index].title;
+    movieParags[index].innerText = movie[index].overview;
+    movieReviews[index].innerText =
+      `(${movieReview} reviews)`;
 
-  if (movie[0].vote_count > 999)
-    movieReview.innerText += `(${movie[0].vote_count / 1000} reviews)`;
-  else
-    movieReview.innerText += `(${movie[0].vote_count} reviews)`;
+    fillStars(movie[index], index);
+  }
 
   document.querySelector('.slider-buttons').addEventListener('click', (btn) => {
-    clearInterval(autoStart);
-
     const index = btn.target.dataset.id;
+    
+    if (!index) return null;
 
-    sliderImgs.forEach((e) => imgTranslate(e, index));
+    clearInterval(autoStart);
+    slideIndex = index;
+    autoStart = setInterval(autoTranslate, 4000);
+    sliderArticles.forEach(e => sliderTranslate(e, index));
 
-    if (index) {
-      movieTitle.innerText = movie[index].title;
-      movieParag.innerText = movie[index].overview;
-      
-      if (movie[index].vote_count > 999) movieReview.innerText = `(${movie[index].vote_count / 1000} reviews)`;
-      else movieReview.innerText = `(${movie[index].vote_count} reviews)`;
-    }
-
-    let startAgain = setInterval(autoTranslate, 5000);
-
-    fillStars(movie, index);
+    activeId = parseInt(index, 10) + 1;
+    btnActive(activeId);
   });
 }
 
 function fillStars(movie, index) {
-  if (!movie[index]) return 0;
-
-  const movieStar = movie[index].vote_average;
+  const stars = document.querySelectorAll(`#article-${index + 1} .star`);
+  const movieStar = movie.vote_average;
   const filledStar = Math.floor(movieStar / 2);
-  const fraction = (movieStar - Math.floor(movieStar));
+  const lastStar = filledStar;
+  const fraction = movieStar - Math.floor(movieStar);
 
+  for (let index = 0; index < filledStar; index++)
+    stars[index].style.background = '#ffc107';
 
-  stars.forEach(star => star.style.background = '');
-
-  for (let filledIndex = 1; filledIndex <= filledStar; filledIndex++) {
-    document.querySelector(`#star-${filledIndex}`).style.background = `#ffc107`;
-  }
-
-  document.querySelector(`#star-${filledStar + 1}`).style.background = 
+  stars[lastStar].style.background =
     `linear-gradient(90deg, #ffc107 ${fraction.toFixed(2) * 100}%, rgba(179, 179, 179, 0.3)0%)`;
-
-  console.log('filled', filledStar, 'fraction', fraction.toFixed(2) * 100);
 }
 
-let index = 1;
+let slideIndex = 1;
 
 function autoTranslate() {
-  if (index == sliderImgs.length) index = 0;
+  if (slideIndex == sliderArticles.length) slideIndex = 0;
 
-  sliderImgs.forEach(e => e.style.transform = `translate(-${index * 100}%, -30%)`);
-  index++;
+  sliderArticles.forEach(e => sliderTranslate(e, slideIndex));
+  slideIndex++;
+
+  btnActive(slideIndex);
 }
 
-function imgTranslate(img, index) {
-  img.style.transform = `translate(-${(index * 100)}%, -30%)`;
+function sliderTranslate(e, index) {
+  e.style.transform = `translateX(-${(index * 100)}%)`;
 }
 
-let autoStart = setInterval(autoTranslate, 5000);
+document.querySelector('#slider-btn-1').classList.add('slider-btn-hover');
 
-getMovies(API_URL);
+function btnActive(index) {
+  const prev = document.querySelectorAll(`.slider-btn`);
+  const active = document.querySelector(`#slider-btn-${index}`);
+  
+  prev.forEach(btn => btn.classList.remove('slider-btn-hover'));
+  active.classList.add('slider-btn-hover');
+}
+
+function addMovieCard(movie, ulName) {
+  let ul = document.querySelector(`.${ulName}`);
+
+  for (let index = 0; index < 20; index++) {
+    let li = document.createElement('li');
+    let img = document.createElement('img');
+
+    ul.appendChild(li);
+    li.appendChild(img);
+    li.classList.add('movie-card');
+    img.classList.add('movie-card');
+    img.src = CARD_PATH + movie[index].poster_path;
+  }
+}
+
+let autoStart = setInterval(autoTranslate, 4000);
+
+getMovies(POPULAR_MOVIES);
+getMovies(POPULAR_TV);
+getMovies(NOW_PLAYING);
